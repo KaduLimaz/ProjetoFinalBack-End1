@@ -43,13 +43,13 @@ app.post("/sign-up", async (request, response) =>{
     
     }
 
-    const hasPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = {
         id: newUserID,
         name,
         email,
-        password: hasPassword,
+        password: hashPassword,
     };
 
     bankUsers.push(newUser);
@@ -58,4 +58,34 @@ app.post("/sign-up", async (request, response) =>{
         message: 'Usuário criado com sucesso!',
         user: newUser
     });
+})
+
+//login
+
+app.post("/login", async (request, response)=>{
+    const { email, password } = request.body;
+
+    const userValid = bankUsers.find(user => user.email === email);
+
+    if(!userValid){
+        return response.status(400).json({
+            message: 'Login ou senha incorreto'
+        });
+    }
+    const passwordIsValid = await bcrypt.compare(password, userValid.password);
+
+
+    if(!passwordIsValid){
+        return response.status(400).json({
+            message: 'Login ou senha incorreto'
+        })
+    }
+ 
+
+    response.status(200).json({
+        message: `Login realizado com sucesso! Bem vindo ${userValid.name}`,
+        
+    })
+
+   
 })
