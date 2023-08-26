@@ -89,3 +89,36 @@ app.post("/login", async (request, response)=>{
 
    
 })
+
+//Criar recado
+
+app.post("/message/new", (request, response)=>{
+    const {title,description, userID} = request.body
+
+    const user = bankUsers.find(user => user.id === userID)
+    if(!user){
+        return response.status(400).json({
+            message: 'Usuário não encontrado!'
+        })
+    }
+    const newMessage = {
+        id: uuidv4(),
+        title,
+        description,
+        userID
+    }
+
+   if(!newMessage.title){
+    return response.status(400).json({
+        message: 'Título obrigatório!'
+    })
+   }
+    messages.push(newMessage);
+
+    response.status(201).json({
+        message: "Recado criado com sucesso",
+        newMessage
+    })
+
+
+});
