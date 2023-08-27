@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 
@@ -184,5 +184,5 @@ app.delete("/message/:messageID", (request, response) => {
   return response.status(200).json({
     message: "Recado deletado com sucesso!",
   });
-  
+
 })
