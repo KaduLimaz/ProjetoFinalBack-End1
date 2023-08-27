@@ -166,3 +166,23 @@ app.put("/message/:messageID", (request, response) => {
     message: "Recado atualizado com sucesso!",
   });
 });
+
+//deletar recados de um usuario
+
+
+app.delete("/message/:messageID", (request, response) => {
+  const { messageID} = request.params;
+  const messageIndex = messages.findIndex(
+    (message) => message.id === messageID
+  );
+  if (messageIndex === -1) {
+    return response.status(400).json({
+      message: "Recado não encontrado!",
+    });
+  }
+  messages.splice(messageIndex, 1);
+  return response.status(200).json({
+    message: "Recado deletado com sucesso!",
+  });
+  
+})
